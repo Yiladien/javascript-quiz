@@ -137,11 +137,12 @@ li {
   text-align: left;
 }
 
-.feedbackSection p {
+.feedbackResponse {
   max-width: 600px;
   text-align: left;
   margin: 0px auto;
-  padding: 20px;
+  padding: 10px 0px;
   border-top-style: solid;
   border-color: var(--font-color);
+  font-size: 1.4rem;
 }
