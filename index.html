@@ -13,14 +13,14 @@
     </header>
     <main class="page-content">
       <section class="score-time">
-        <div class="high-score">
+        <div class="high-score" id="highScoreContainer">
           <button class="btn score-btn" id="high-score-btn" type="button">
             View High Scores
           </button>
         </div>
         <div id="countdown"></div>
       </section>
-      <section class="quiz-section">
+      <section class="quiz-section" id="quiz-section">
         <h2 id="quiz-question">Coding Quiz Challenge</h2>
         <p id="quiz-paragraph">
           Try to answer the following code-related questions within the time
@@ -28,10 +28,12 @@
           score/time by ten seconds!
         </p>
         <button class="btn" id="start" type="button">Start Quiz</button>
-
-        <!-- quiz buttons - for visual testing, to be added by js -->
-        <div class="btn-list" id="answer-list"></div>
       </section>
+      <!-- quiz buttons - for visual testing, to be added by js -->
+      <form id="highScoreFormSection"></form>
+      <div id="highScorePageBtns"></div>
+      <div class="btn-list" id="answer-list"></div>
+
       <section id="quiz-feedback"></section>
     </main>
     <script src="./assets/js/script.js"></script>

@@ -110,7 +110,7 @@ h1 {
 }
 
 .quiz-section {
-  padding: 20px;
+  padding: 20px 0px 0px 0px;
   text-align: center;
 }
 
@@ -132,17 +132,53 @@ h1 {
   max-width: 600px;
 }
 
+#highScoreFormSection,
+#highScorePageBtns,
+#answer-list {
+  text-align: center;
+  margin: 0px auto;
+}
+
 li {
   list-style: none;
   text-align: left;
 }
 
+#highScoreFormEl {
+  outline: none;
+  border: none;
+  padding: 12px;
+  width: 30%;
+  font-size: 1.2rem;
+  border: 2px solid var(--grey);
+  border-radius: 12px;
+}
+
+#submit-btn {
+  margin: 0px 10px;
+  font-size: 1.4rem;
+}
+
 .feedbackResponse {
   max-width: 600px;
   text-align: left;
-  margin: 0px auto;
+  margin: 10px auto;
   padding: 10px 0px;
   border-top-style: solid;
   border-color: var(--font-color);
   font-size: 1.4rem;
 }
+
+.score-li {
+  background-color: var(--sub-head-bar-color);
+}
+
+#goBack-btn,
+#clearScore-btn {
+  margin: 10px 10px;
+  font-size: 1.4rem;
+}
+
+/* .hide {
+  border-style: none;
+} */
