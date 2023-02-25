@@ -10,7 +10,7 @@ var highScoreList = [];
 
 // Timers
 var timerEl = document.getElementById("countdown");
-const timeLeftConst = 60;
+const timeLeftConst = 20;
 var timeLeft = timeLeftConst;
 var timeoutDelay = 1500;
 
@@ -41,7 +41,7 @@ function countdown() {
   }, 1000);
 }
 
-// Starts timer and first question
+// Resets game, starts timer, calls first question
 var quizStart = function (event) {
   var targetEl = event.target;
   console.log(targetEl);
@@ -81,6 +81,7 @@ function getQuestion() {
 
   // provides number to correspond to array position in question object array
   displayQuestion();
+  quizAnswersEl.addEventListener("click", userAnswers);
 }
 
 function displayQuestion() {
@@ -121,6 +122,7 @@ function displayQuestion() {
 }
 
 function userAnswers(event) {
+  quizAnswersEl.removeEventListener("click", userAnswers);
   var targetEl = event.target;
   console.log(targetEl);
 
@@ -143,15 +145,18 @@ function answerTest(userAnswer) {
     score++;
     quizFeedbackResponseEl.textContent = "Correct!";
   } else {
-    timeLeft = timeLeft - 10;
-
     quizFeedbackResponseEl.textContent =
       "Incorrect! The correct answer is: " +
       quizQuestions[questionNumber].answer;
+    if (timeLeft > 10) {
+      timeLeft = timeLeft - 10;
+    } else {
+      timeLeft = 0;
+    }
   }
 
   quizFeedbackEl.appendChild(quizFeedbackResponseEl);
-  var pauseTime = setTimeout(clearQuestions, timeoutDelay);
+  setTimeout(clearQuestions, timeoutDelay);
 }
 
 function clearQuestions() {
@@ -255,7 +260,7 @@ var initialsFormEvent = function (event) {
 function updateHighScore(newScoreUser, highScoreList) {
   var newEntry = {
     initials: newScoreUser,
-    score: score
+    score: score,
   };
   var highScoreList = [];
   highScoreList = localStorage.getItem("jsQuizHighScores");
@@ -412,7 +417,8 @@ function gameRestart() {
 
 var quizQuestions = [
   {
-    question: "A very useful tool used during development and debugging for printing content to the debugger is:",
+    question:
+      "A very useful tool used during development and debugging for printing content to the debugger is:",
     answer: "console.log",
     choices: ["JavaScript", "terminal/bash", "for loops", "console.log"],
   },
@@ -422,18 +428,23 @@ var quizQuestions = [
     choices: ["strings", "booleans", "alerts", "numbers"],
   },
   {
-    question:
-      "The condition in an if/else statement is enclosed with _____.",
+    question: "The condition in an if/else statement is enclosed with _____.",
     answer: "parenthesis",
     choices: ["quotes", "curly brackets", "parenthesis", "square brackets"],
   },
   {
     question: "Arrays in JavaScript can be used to store",
     answer: "all of the above",
-    choices: ["numbers and strings", "other arrays", "booleans", "all of the above"],
+    choices: [
+      "numbers and strings",
+      "other arrays",
+      "booleans",
+      "all of the above",
+    ],
   },
   {
-    question: "String values must be enclosed within _____ when being assigned to variables.",
+    question:
+      "String values must be enclosed within _____ when being assigned to variables.",
     answer: "quotes",
     choices: ["commas", "curly brackets", "quotes", "parenthesis"],
   },
@@ -450,9 +461,6 @@ quizSectionEl.addEventListener("click", quizStart);
 
 // High Score Button
 highScoreContainer.addEventListener("click", highScorePageHandler);
-
-// Quiz buttons
-quizAnswersEl.addEventListener("click", userAnswers);
 
 // Form Submit button
 formSectionEl.addEventListener("submit", initialsFormEvent);
