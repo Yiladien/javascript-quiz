@@ -11,7 +11,12 @@
   --button-bghover-color: #ffc8dd;
   --button-shadow: #555555; */
 
-  /* color pallete 2 */
+  /* color pallete 2 
+  --black: #000000ff;
+  --white: #ffffffff;
+  --cerulean: #007ea7ff;
+  --thulian-pink: #e56399ff;
+  --eminence: #772d8bff;*/
   --background-color: #843899;
   --font-color: #ffffff;
   --header-color: #ffffff;
@@ -96,7 +101,7 @@ header h1:hover {
   padding: 5px 20px;
   margin: 3px;
   border-radius: 10px;
-  min-width: 25ch;
+  min-width: 20ch;
   text-align: left;
   background: var(--button-bg-color);
   color: var(--button-font-color);
@@ -117,10 +122,12 @@ header h1:hover {
 /* END BUTTONS */
 .score-time {
   display: flex;
-  justify-content: space-between;
   padding: 20px 50px 20px 20px;
   background-color: var(--sub-head-bar-color);
   font-size: 1.4rem;
+}
+#countdown {
+  margin: auto;
 }
 
 .countdown {
@@ -135,7 +142,7 @@ header h1:hover {
 }
 
 .quiz-section {
-  padding: 20px 0px 0px 0px;
+  padding: 20px 10px 0px 10px;
   text-align: center;
 }
 
@@ -155,6 +162,7 @@ header h1:hover {
 
 .btn-list {
   max-width: 600px;
+  padding: 0px 5px 0px 10px;
 }
 
 #highScoreFormSection,
@@ -194,9 +202,39 @@ li {
   font-size: 1.4rem;
 }
 
-.score-li {
+#scoreTable {
+  margin: auto;
   background-color: var(--sub-head-bar-color);
+  border-color: var(--sub-head-bar-color);
+  border-style: solid;
+  border-width: 10px;
+  border-radius: 10px;
+  border-spacing: 0px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
+
+#scoreTable th {
+  padding: 5px 20px 0px 20px;
+  margin: 0px;
+  font-size: larger;
+  border-color: black;
+  border-bottom-style: solid;
+  border-width: 3px;
+}
+
+#scoreTable td {
+  padding: 10px 20px 0px 20px;
+  margin: 0px;
+  border-color: black;
+  border-bottom-style: solid;
+  border-width: 3px;
+}
+/* 
+#scoreTable tr:nth-child(even) {
+  background-color: var(--sub-head-bar-color);
+  background-color: rgb(73, 73, 73);
+} */
 
 #goBack-btn,
 #clearScore-btn {
@@ -207,3 +245,13 @@ li {
 /* .hide {
   border-style: none;
 } */
+
+@media (max-width: 690px) {
+  #highScoreFormEl {
+    font-size: 0.8rem;
+  }
+
+  #submit-btn {
+    font-size: 1rem;
+  }
+}

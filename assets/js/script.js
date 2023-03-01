@@ -10,10 +10,9 @@ var highScoreList = [];
 
 // Timers
 var timerEl = document.getElementById("countdown");
-const timeLeftConst = 20;
+const timeLeftConst = 60;
 var timeLeft = timeLeftConst;
-var timeoutDelay = 1500;
-
+var timeoutDelay = 3000;
 var quizQuestionEl = document.getElementById("quiz-question");
 var quizParagraphEl = document.getElementById("quiz-paragraph");
 var quizAnswersEl = document.getElementById("answer-list");
@@ -45,6 +44,8 @@ function countdown() {
 var quizStart = function (event) {
   var targetEl = event.target;
   console.log(targetEl);
+
+  highScoreContainer.hidden = true;
 
   if (targetEl.matches("#start")) {
     questionCounter = 0;
@@ -149,7 +150,8 @@ function answerTest(userAnswer) {
       "Incorrect! The correct answer is: " +
       quizQuestions[questionNumber].answer;
     if (timeLeft > 10) {
-      timeLeft = timeLeft - 10;
+      // removing 8 seconds as timer continues and the correct message is displayed for 2 seconds before presenting the next question.
+      timeLeft = timeLeft - 8;
     } else {
       timeLeft = 0;
     }
@@ -219,7 +221,21 @@ function endGame() {
   if (winnerTest) {
     highScoreForm(highScoreList);
   } else {
-    gameRestart();
+    quizParagraphEl.textContent =
+      "Your final score is " +
+      score +
+      ". You did not achieve a new high score. Try again!";
+
+    var homeAnchorEl = document.createElement("a");
+    homeAnchorEl.setAttribute("href", "/");
+
+    var goBackButtonEl = document.createElement("button");
+    goBackButtonEl.textContent = "Home";
+    goBackButtonEl.className = "btn";
+    goBackButtonEl.id = "goBack-btn";
+    goBackButtonEl.setAttribute("type", "button");
+    homeAnchorEl.appendChild(goBackButtonEl);
+    highScorePageBtnsEl.appendChild(homeAnchorEl);
   }
 }
 
@@ -270,40 +286,20 @@ function updateHighScore(newScoreUser, highScoreList) {
     highScoreList = JSON.parse(highScoreList);
   }
 
-  highScoreList.push(newEntry);
+  for (i = 0; i < highScoreList.length; i++) {
+    if (score >= highScoreList[i].score) {
+      highScoreList.splice(i, 0, newEntry);
+      i = highScoreList.length;
+    }
+  }
 
-  //   var tempNewList = [];
-  //   if (highScoreList.length === 0 || !highScoreList) {
-  //     highScoreList.push(newEntry);
-  //   } else {
-  //     for (var i = 0; i < highScoreList.length; i++) {
-  //       if (score >= parseInt(highScoreList[i].score)) {
-  //         var scorePosition = i;
-  //         i = highScoreList.length;
-  //         for (var j = 0; j < highScoreList.length; j++) {
-  //           if (j === scorePosition) {
-  //             tempNewList.push(newEntry);
-  //           }
-  //           tempNewList.push(highScoreList[j]);
-  //         }
-  //       }
-  //     }
-  //     highScoreList = tempNewList;
-  //   }
+  if (highScoreList.length > maxHighScorelist) {
+    highScoreList.splice(maxHighScorelist);
+  }
 
   localStorage.setItem("jsQuizHighScores", JSON.stringify(highScoreList));
   highScorePage();
 }
-
-var highScorePageHandler = function (event) {
-  var targetEl = event.target;
-  console.log(targetEl);
-
-  if (!targetEl.matches("#high-score-btn")) {
-    return false;
-  }
-  highScorePage();
-};
 
 function highScorePage() {
   //   quizHighScoreBtnEl.textContent = "";
@@ -311,6 +307,10 @@ function highScorePage() {
   //   quizHighScoreBtnEl.class("hide");
 
   quizHighScoreBtnEl.remove();
+
+  highScoreContainer.hidden = false;
+
+  timerEl.textContent = "";
   var quizQuestionEl = document.getElementById("quiz-question");
   var quizStartBtnEl = document.getElementById("start");
   if (quizStartBtnEl) {
@@ -330,35 +330,66 @@ function highScorePage() {
   // Checking if localStorage returns NULL
   if (!highScoreList) {
     highScoreList = [];
+    quizQuestionEl.textContent =
+      "There are no high scores on this device. Play the game and add your high score!";
+    quizParagraphEl.textContent = "";
   } else {
     highScoreList = JSON.parse(highScoreList);
-  }
+    quizQuestionEl.textContent = "High Scores";
+    quizParagraphEl.textContent = "";
 
-  console.log(highScoreList[0]);
-  quizQuestionEl.textContent = "High Scores";
-  quizParagraphEl.textContent = "";
+    if (highScoreList) {
+      var scoreTableEl = document.createElement("table");
+      scoreTableEl.id = "scoreTable";
 
-  console.log(highScoreList);
+      var scoreHeaderRowEl = document.createElement("tr");
+      var scoreHeaderRankEl = document.createElement("th");
+      scoreHeaderRankEl.textContent = "Rank";
+      scoreHeaderRowEl.appendChild(scoreHeaderRankEl);
 
-  if (highScoreList) {
-    var quizChoicesEl = document.createElement("ul");
-    quizChoicesEl.id = "score-ul";
+      var scoreHeaderNameEl = document.createElement("th");
+      scoreHeaderNameEl.textContent = "Initials";
+      scoreHeaderRowEl.appendChild(scoreHeaderNameEl);
 
-    for (var i = 0; i < maxHighScorelist; i++) {
-      var scoreEl = document.createElement("li");
-      scoreEl.className = "score-li";
-      scoreEl.textContent =
-        i + ". " + highScoreList[i].initials + " - " + highScoreList[i].score;
-      quizChoicesEl.appendChild(scoreEl);
+      var scoreHeaderPointsEl = document.createElement("th");
+      scoreHeaderPointsEl.textContent = "Score";
+      scoreHeaderRowEl.appendChild(scoreHeaderPointsEl);
+
+      scoreTableEl.appendChild(scoreHeaderRowEl);
+
+      for (var i = 0; i < highScoreList.length; i++) {
+        var scoreRowEl = document.createElement("tr");
+        scoreRowEl.className = "highScoreTr";
+
+        var scoreRankTdEl = document.createElement("td");
+        scoreRankTdEl.textContent = i + 1;
+        scoreRowEl.appendChild(scoreRankTdEl);
+
+        var scoreNameTdEl = document.createElement("td");
+        scoreNameTdEl.textContent = highScoreList[i].initials;
+        scoreRowEl.appendChild(scoreNameTdEl);
+
+        var scorePointTdEl = document.createElement("td");
+        scorePointTdEl.textContent = highScoreList[i].score;
+        scoreRowEl.appendChild(scorePointTdEl);
+
+        scoreTableEl.appendChild(scoreRowEl);
+      }
     }
+
+    formSectionEl.appendChild(scoreTableEl);
   }
+
+  var homeAnchorEl = document.createElement("a");
+  homeAnchorEl.setAttribute("href", "/");
 
   var goBackButtonEl = document.createElement("button");
-  goBackButtonEl.textContent = "Go Back";
+  goBackButtonEl.textContent = "Home";
   goBackButtonEl.className = "btn";
   goBackButtonEl.id = "goBack-btn";
   goBackButtonEl.setAttribute("type", "button");
-  highScorePageBtnsEl.appendChild(goBackButtonEl);
+  homeAnchorEl.appendChild(goBackButtonEl);
+  highScorePageBtnsEl.appendChild(homeAnchorEl);
 
   var clearScoresButtonEl = document.createElement("button");
   clearScoresButtonEl.textContent = "Clear High Scores";
@@ -368,52 +399,29 @@ function highScorePage() {
   highScorePageBtnsEl.appendChild(clearScoresButtonEl);
 }
 
-function highScorePageHandler(event) {
+var highScoreButtonHandler = function (event) {
   var targetEl = event.target;
   console.log(targetEl);
 
-  if (targetEl.matches("#goBack-btn")) {
-    gameRestart();
-  } else if (targetEl.matches("#clearScore-btn")) {
-    localStorage.clear();
-    // localStorage.setItem("jsQuizHighScores", "");
-  } else {
+  if (!targetEl.matches("#high-score-btn")) {
     return false;
   }
-}
+  highScorePage();
+};
 
-function gameRestart() {
-  var goBackButtonEl = document.getElementById("goBack-btn");
-  if (goBackButtonEl) {
-    goBackButtonEl.remove();
-  }
-  var clearScoresButtonEl = document.getElementById("clearScore-btn");
-  if (clearScoresButtonEl) {
-    clearScoresButtonEl.remove();
-  }
-  var submitButtonEl = document.getElementById("submit-btn");
-  if (submitButtonEl) {
-    submitButtonEl.remove();
-  }
-  var formEl = document.getElementById("highScoreFormEl");
-  if (formEl) {
-    formEl.remove();
-  }
-  var quizHighScoreBtnEl = document.getElementById("high-score-btn");
-  if (quizHighScoreBtnEl) {
-    quizHighScoreBtnEl.remove();
-  }
+var highScorePageHandler = function (event) {
+  var targetEl = event.target;
+  console.log("here");
+  console.log(targetEl);
 
-  highScoreContainer.innerHTML =
-    "<button class='btn score-btn' id='high-score-btn' type='button'>View High Scores</button>";
-  quizSectionEl.innerHTML =
-    "<h2 id='quiz-question'>Coding Quiz Challenge</h2><p id='quiz-paragraph'>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p><button class='btn' id='start' type='button'>Start Quiz</button>";
-
-  var questionNumberList = [];
-  for (var i = 0; i < quizQuestions.length; i++) {
-    questionNumberList[i] = i;
+  if (targetEl.matches("#clearScore-btn")) {
+    console.log("true");
+    localStorage.clear();
+  } else {
+    console.log("false");
+    return false;
   }
-}
+};
 
 var quizQuestions = [
   {
@@ -448,6 +456,32 @@ var quizQuestions = [
     answer: "quotes",
     choices: ["commas", "curly brackets", "quotes", "parenthesis"],
   },
+  {
+    question: "To add another value to the end of an array, you would use:",
+    answer: "push",
+    choices: ["pop", "push", "shift", "sort"],
+  },
+  {
+    question:
+      "To repeat a set of instructions until a condition is met, you would use a:",
+    answer: "do while",
+    choices: ["do while", "for", "if", "switch"],
+  },
+  {
+    question: "True or False: You can add an object within an object.",
+    answer: "True",
+    choices: ["True", "False"],
+  },
+  {
+    question: "True or False: You can add an array within an object.",
+    answer: "True",
+    choices: ["True", "False"],
+  },
+  {
+    question: "True or False: Java is short for Javascript",
+    answer: "False",
+    choices: ["True", "False"],
+  },
 ];
 
 // Creating array to track questions used
@@ -460,7 +494,7 @@ for (var i = 0; i < quizQuestions.length; i++) {
 quizSectionEl.addEventListener("click", quizStart);
 
 // High Score Button
-highScoreContainer.addEventListener("click", highScorePageHandler);
+highScoreContainer.addEventListener("click", highScoreButtonHandler);
 
 // Form Submit button
 formSectionEl.addEventListener("submit", initialsFormEvent);
