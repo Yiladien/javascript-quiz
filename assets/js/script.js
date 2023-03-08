@@ -5,7 +5,7 @@ var questionNumber = 0;
 
 // High score variables
 var score = 0;
-var maxHighScorelist = 10;
+var maxHighScoreList = 5;
 var highScoreList = [];
 
 // Timers
@@ -45,9 +45,8 @@ var quizStart = function (event) {
   var targetEl = event.target;
   console.log(targetEl);
 
-  highScoreContainer.hidden = true;
-
   if (targetEl.matches("#start")) {
+    highScoreContainer.hidden = true;
     questionCounter = 0;
     questionUsed = [];
     questionNumber = 0;
@@ -123,11 +122,11 @@ function displayQuestion() {
 }
 
 function userAnswers(event) {
-  quizAnswersEl.removeEventListener("click", userAnswers);
   var targetEl = event.target;
   console.log(targetEl);
 
   if (targetEl.matches(".quiz-btn")) {
+    quizAnswersEl.removeEventListener("click", userAnswers);
     var userAnswer = targetEl.getAttribute("data-response");
     answerTest(userAnswer);
   } else {
@@ -219,7 +218,7 @@ function endGame() {
   }
 
   if (winnerTest) {
-    highScoreForm(highScoreList);
+    highScoreForm();
   } else {
     quizParagraphEl.textContent =
       "Your final score is " +
@@ -239,7 +238,7 @@ function endGame() {
   }
 }
 
-function highScoreForm(highScoreList) {
+function highScoreForm() {
   var formCheck = document.querySelector("input");
   console.log(formCheck);
   if (!formCheck) {
@@ -262,6 +261,7 @@ function highScoreForm(highScoreList) {
 
 var initialsFormEvent = function (event) {
   event.preventDefault();
+  console.log("submit-button");
   var formEl = document.getElementById("highScoreFormEl");
 
   var userInitials = formEl.value;
@@ -270,31 +270,53 @@ var initialsFormEvent = function (event) {
     return false;
   }
 
-  updateHighScore(formEl.value, highScoreList);
+  updateHighScore(formEl.value);
 };
 
-function updateHighScore(newScoreUser, highScoreList) {
+function updateHighScore(newScoreUser) {
   var newEntry = {
     initials: newScoreUser,
     score: score,
   };
+  console.log(newEntry);
   var highScoreList = [];
   highScoreList = localStorage.getItem("jsQuizHighScores");
   if (!highScoreList) {
-    highScoreList = [];
+    console.log("local storage is empty");
+    highScoreList = [newEntry];
   } else {
+    console.log(highScoreList);
+    console.log(
+      "highScoreList length is not empty, it is " + highScoreList.length
+    );
+    console.log(highScoreList);
     highScoreList = JSON.parse(highScoreList);
-  }
-
-  for (i = 0; i < highScoreList.length; i++) {
-    if (score >= highScoreList[i].score) {
-      highScoreList.splice(i, 0, newEntry);
-      i = highScoreList.length;
+    console.log("highScoreList parsed is " + highScoreList);
+    console.log(highScoreList);
+    console.log("highScoreList length after parsed is " + highScoreList.length);
+    for (i = 0; i < highScoreList.length; i++) {
+      console.log("For loop i = " + i);
+      console.log("highScoreList length is " + highScoreList.length);
+      console.log("score is " + score);
+      console.log("highScoreList[i].score is " + highScoreList[i].score);
+      if (score >= highScoreList[i].score) {
+        console.log("score is greater than or equal to highScoreList[i].score");
+        highScoreList.splice(i, 0, newEntry);
+        console.log("After splice, highScoreList is " + highScoreList);
+        console.log("i equals " + i);
+        console.log("highScoreList.length equals " + highScoreList.length);
+        i = highScoreList.length;
+        console.log("Updated i equals " + i);
+      }
     }
-  }
+    console.log("highScoreList length is " + highScoreList.length);
+    console.log("maxHighScoreList is " + maxHighScoreList);
+    if (highScoreList.length > maxHighScoreList) {
+      console.log("highScoreList length is greater than maxHighScoreList");
+      highScoreList.splice(maxHighScoreList);
 
-  if (highScoreList.length > maxHighScorelist) {
-    highScoreList.splice(maxHighScorelist);
+      console.log("highScoreList length is now " + highScoreList.length);
+    }
   }
 
   localStorage.setItem("jsQuizHighScores", JSON.stringify(highScoreList));
@@ -329,7 +351,6 @@ function highScorePage() {
   highScoreList = localStorage.getItem("jsQuizHighScores");
   // Checking if localStorage returns NULL
   if (!highScoreList) {
-    highScoreList = [];
     quizQuestionEl.textContent =
       "There are no high scores on this device. Play the game and add your high score!";
     quizParagraphEl.textContent = "";
@@ -411,14 +432,11 @@ var highScoreButtonHandler = function (event) {
 
 var highScorePageHandler = function (event) {
   var targetEl = event.target;
-  console.log("here");
   console.log(targetEl);
 
   if (targetEl.matches("#clearScore-btn")) {
-    console.log("true");
     localStorage.clear();
   } else {
-    console.log("false");
     return false;
   }
 };

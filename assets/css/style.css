@@ -130,16 +130,11 @@ header h1:hover {
   margin: auto;
 }
 
-.countdown {
-}
-
 /* HIGH SCORE AND TIME BAR */
 
 /*  */
 
 /* MAIN CONTENT */
-.page-content {
-}
 
 .quiz-section {
   padding: 20px 10px 0px 10px;
@@ -181,7 +176,7 @@ li {
   outline: none;
   border: none;
   padding: 12px;
-  width: 30%;
+  width: 9rem;
   font-size: 1.2rem;
   border: 2px solid var(--grey);
   border-radius: 12px;
@@ -249,6 +244,7 @@ li {
 @media (max-width: 690px) {
   #highScoreFormEl {
     font-size: 0.8rem;
+    width: 6rem;
   }
 
   #submit-btn {
