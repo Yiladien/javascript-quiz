@@ -436,6 +436,21 @@ var highScorePageHandler = function (event) {
 
   if (targetEl.matches("#clearScore-btn")) {
     localStorage.clear();
+
+    var highScoreHomeBtn = document.getElementById("goBack-btn");
+    var highScoreClearBtn = document.getElementById("clearScore-btn");
+    var highScoreScoreTable = document.getElementById("scoreTable");
+    if (highScoreHomeBtn) {
+      highScoreHomeBtn.remove();
+    }
+    if (highScoreClearBtn) {
+      highScoreClearBtn.remove();
+    }
+    if (highScoreScoreTable) {
+      highScoreScoreTable.remove();
+    }
+
+    highScorePage();
   } else {
     return false;
   }
