@@ -43,7 +43,6 @@ function countdown() {
 // Resets game, starts timer, calls first question
 var quizStart = function (event) {
   var targetEl = event.target;
-  console.log(targetEl);
 
   if (targetEl.matches("#start")) {
     highScoreContainer.hidden = true;
@@ -123,7 +122,7 @@ function displayQuestion() {
 
 function userAnswers(event) {
   var targetEl = event.target;
-  console.log(targetEl);
+  // console.log(targetEl);
 
   if (targetEl.matches(".quiz-btn")) {
     quizAnswersEl.removeEventListener("click", userAnswers);
@@ -240,7 +239,6 @@ function endGame() {
 
 function highScoreForm() {
   var formCheck = document.querySelector("input");
-  console.log(formCheck);
   if (!formCheck) {
     var formEl = document.createElement("input");
     formEl.class = "highScoreFormEl";
@@ -261,7 +259,6 @@ function highScoreForm() {
 
 var initialsFormEvent = function (event) {
   event.preventDefault();
-  console.log("submit-button");
   var formEl = document.getElementById("highScoreFormEl");
 
   var userInitials = formEl.value;
@@ -278,44 +275,20 @@ function updateHighScore(newScoreUser) {
     initials: newScoreUser,
     score: score,
   };
-  console.log(newEntry);
   var highScoreList = [];
   highScoreList = localStorage.getItem("jsQuizHighScores");
   if (!highScoreList) {
-    console.log("local storage is empty");
     highScoreList = [newEntry];
   } else {
-    console.log(highScoreList);
-    console.log(
-      "highScoreList length is not empty, it is " + highScoreList.length
-    );
-    console.log(highScoreList);
     highScoreList = JSON.parse(highScoreList);
-    console.log("highScoreList parsed is " + highScoreList);
-    console.log(highScoreList);
-    console.log("highScoreList length after parsed is " + highScoreList.length);
     for (i = 0; i < highScoreList.length; i++) {
-      console.log("For loop i = " + i);
-      console.log("highScoreList length is " + highScoreList.length);
-      console.log("score is " + score);
-      console.log("highScoreList[i].score is " + highScoreList[i].score);
       if (score >= highScoreList[i].score) {
-        console.log("score is greater than or equal to highScoreList[i].score");
         highScoreList.splice(i, 0, newEntry);
-        console.log("After splice, highScoreList is " + highScoreList);
-        console.log("i equals " + i);
-        console.log("highScoreList.length equals " + highScoreList.length);
         i = highScoreList.length;
-        console.log("Updated i equals " + i);
       }
     }
-    console.log("highScoreList length is " + highScoreList.length);
-    console.log("maxHighScoreList is " + maxHighScoreList);
     if (highScoreList.length > maxHighScoreList) {
-      console.log("highScoreList length is greater than maxHighScoreList");
       highScoreList.splice(maxHighScoreList);
-
-      console.log("highScoreList length is now " + highScoreList.length);
     }
   }
 
@@ -422,7 +395,6 @@ function highScorePage() {
 
 var highScoreButtonHandler = function (event) {
   var targetEl = event.target;
-  console.log(targetEl);
 
   if (!targetEl.matches("#high-score-btn")) {
     return false;
@@ -432,7 +404,6 @@ var highScoreButtonHandler = function (event) {
 
 var highScorePageHandler = function (event) {
   var targetEl = event.target;
-  console.log(targetEl);
 
   if (targetEl.matches("#clearScore-btn")) {
     localStorage.clear();
