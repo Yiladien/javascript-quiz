@@ -225,7 +225,7 @@ function endGame() {
       ". You did not achieve a new high score. Try again!";
 
     var homeAnchorEl = document.createElement("a");
-    homeAnchorEl.setAttribute("href", "/");
+    homeAnchorEl.setAttribute("href", "./");
 
     var goBackButtonEl = document.createElement("button");
     goBackButtonEl.textContent = "Home";
@@ -375,7 +375,7 @@ function highScorePage() {
   }
 
   var homeAnchorEl = document.createElement("a");
-  homeAnchorEl.setAttribute("href", "/");
+  homeAnchorEl.setAttribute("href", "./");
 
   var goBackButtonEl = document.createElement("button");
   goBackButtonEl.textContent = "Home";
